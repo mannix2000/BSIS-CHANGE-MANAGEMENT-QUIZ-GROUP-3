@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Change Management</title>
+<style>
+  :root{font-family:Arial,Helvetica,sans-serif;color:#0f172a}
+  body{background:#f3f4f6;margin:0;padding:20px;line-height:1.45}
+  .wrap{max-width:980px;margin:0 auto}
+  header{display:flex;align-items:center;gap:16px;background:#fff;padding:14px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,.06)}
+  header h1{font-size:1.05rem;margin:0}
+  .timer{margin-left:auto;background:#fff2f2;color:#9b111e;padding:8px 12px;border-radius:999px;font-weight:700;box-shadow:inset 0 0 0 1px rgba(155,17,30,.06)}
+  .card{background:#fff;padding:18px;margin-top:18px;border-radius:10px;box-shadow:0 6px 18px rgba(2,6,23,.04)}
+  label{display:block;font-weight:700;margin-bottom:6px}
+  .meta{color:#6b7280;margin-bottom:12px}
+  select,input[type=text]{width:100%;padding:10px;border-radius:8px;border:1px solid #e5e7eb;margin-bottom:12px;font-size:0.95rem}
+  button{background:#1f6feb;color:#fff;padding:10px 14px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+  button.secondary{background:#eef2ff;color:#1f6feb}
+  .muted{color:#6b7280;font-size:.9rem}
+  .question{padding:12px;border-radius:8px;border:1px solid #eef2f5;margin-bottom:12px;background:#fbfcfe}
+  .qcase{font-weight:600;margin-bottom:8px}
+  .small{font-size:.92rem;color:#374151}
+  #submitMsg{display:none;margin-top:12px;padding:10px;border-radius:8px;background:#ecfdf5;color:#065f46;font-weight:700}
+  @media(min-width:800px){ header h1{font-size:1.15rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Change Management</h1>
+    <div class="timer" id="timer">40:00</div>
+  </header>
+
+  <div class="card" id="accessCodeSection">
+    <label>Enter Exam Access Code</label>
+    <input id="examCodeInput" type="text" placeholder="Enter access code (provided by instructor)" />
+    <div style="display:flex;gap:8px;align-items:center">
+      <button id="examCodeBtn">Start Exam</button>
+      <div class="muted" style="margin-left:auto">Access code required — contact your instructor</div>
+    </div>
+    <p id="codeError" class="muted" style="color:#b91c1c;display:none;margin-top:8px">Incorrect code. Try again.</p>
+  </div>
+
+  <form id="examForm" class="card" autocomplete="off" style="display:none">
+    <label>Student Name</label>
+    <input id="studentName" type="text" placeholder="Last name, First name" />
+    <p class="meta">Instructions: Select the best answer. Questions and visible choices will be randomized each load. Default focus remains on <em>-- Select Answer --</em>.</p>
+
+    <div id="questions">
+      <!-- Each question has data-qid attribute representing original 1..40 order.
+           The provided correct answer key (original order) is:
+           ["A","B","C","D","A","B","D","C","A","B",
+            "C","D","A","B","C","A","D","B","A","C",
+            "B","A","C","D","B","A","C","D","A","B",
+            "C","D","A","B","C","A","D","B","A","C"]
+      -->
+<div class="question" data-qid="1">
+  <div class="qcase">Case 1 — An executive sponsor has gradually stepped back after a major transformation kickoff. Employees are confused about the purpose of upcoming milestones and rumor mills begin to fill the gap.</div>
+  <div class="small">Which immediate action would best rebuild confidence and restore program direction?</div>
+  <label>1.</label>
+  <select name="q1">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Hold a visible town-hall meeting where the sponsor restates intent, clarifies milestones, and renews commitment clearly to all employees.</option>
+    <option value="B">B. Reduce communication temporarily and wait to release updates until the next communication plan is finalized by the project team.</option>
+    <option value="C">C. Replace the executive sponsor immediately to demonstrate accountability and signal that leadership takes ownership of program results.</option>
+    <option value="D">D. Pause all transformation activities until survey data confirms that engagement and understanding levels have improved substantially across teams.</option>
+  </select>
+</div>
+
+<!-- 2 -->
+<div class="question" data-qid="2">
+  <div class="qcase">Case 2 — After a merger, two business units track performance using incompatible scorecards. Teams feel forced to defend legacy metrics instead of focusing on common goals.</div>
+  <div class="small">Which action most effectively aligns measurement and reduces defensiveness?</div>
+  <label>2.</label>
+  <select name="q2">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Mandate immediate adoption of one unit’s metrics to accelerate standardization and prove decisive leadership direction to all stakeholders.</option>
+    <option value="B">B. Co-create a temporary joint dashboard that integrates both units’ metrics and agree on a clear timeline for full harmonization of measures.</option>
+    <option value="C">C. Delay integration until the next fiscal year to give both teams additional emotional space before addressing any measurement alignment issues.</option>
+    <option value="D">D. Allow each business unit to retain its own performance definitions indefinitely and compare progress informally without formal integration requirements.</option>
+  </select>
+</div>
+
+<!-- 3 -->
+<div class="question" data-qid="3">
+  <div class="qcase">Case 3 — Front-line teams are overwhelmed by multiple new digital tools. Complaints rise that “everything changed at once,” and productivity dips sharply.</div>
+  <div class="small">Which step should leadership take first to stabilize adoption?</div>
+  <label>3.</label>
+  <select name="q3">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Launch a new communication campaign reinforcing urgency and emphasizing rapid adoption of every new digital tool across all teams equally.</option>
+    <option value="B">B. Halt all change programs temporarily to allow morale to recover naturally and revisit implementation timelines once the pressure subsides completely.</option>
+    <option value="C">C. Provide quick-reference guides and short training sessions but avoid user testing in order to save time and maintain perceived delivery momentum.</option>
+    <option value="D">D. Sequence rollouts carefully, pause low-value initiatives, and prioritize key tools to relieve workload pressure while building employee confidence gradually.</option>
+  </select>
+</div>
+
+<!-- 4 -->
+<div class="question" data-qid="4">
+  <div class="qcase">Case 4 — A pilot project proved successful, but executives demand an enterprise-wide rollout within weeks. The change team worries about scaling errors and cultural pushback.</div>
+  <div class="small">Which rollout strategy best balances speed and risk?</div>
+  <label>4.</label>
+  <select name="q4">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Expand to all regions simultaneously to demonstrate strong confidence in the new operating model and deliver quick visibility across the enterprise.</option>
+    <option value="B">B. Wait six months to collect more comprehensive data before authorizing any additional deployment steps or resource commitments to wider rollout.</option>
+    <option value="C">C. Deploy in staged cohorts, using each phase to refine communication, address issues, and improve materials before expanding to the broader organization.</option>
+    <option value="D">D. Replace the transformation lead entirely and restart rollout planning from scratch to establish new leadership credibility and restore stakeholder trust.</option>
+  </select>
+</div>
+
+<!-- 5 -->
+<div class="question" data-qid="5">
+  <div class="qcase">Case 5 — Department heads disagree over which transformation initiative deserves scarce funding. Meetings end with no clear decisions.</div>
+  <div class="small">What governance step brings objective alignment?</div>
+  <label>5.</label>
+  <select name="q5">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Form a cross-functional steering committee that ranks initiatives using transparent decision criteria agreed by all key business stakeholders equally.</option>
+    <option value="B">B. Allow the most vocal executive to make a final decision quickly to avoid prolonged debates and reduce delays in allocating limited financial resources.</option>
+    <option value="C">C. Hire external consultants to arbitrate every disagreement and finalize prioritization decisions independently from the internal leadership structure.</option>
+    <option value="D">D. Postpone all funding decisions until the next strategic planning cycle begins, allowing more time for political consensus among department leaders.</option>
+  </select>
+</div>
+
+<!-- 6 -->
+<div class="question" data-qid="6">
+  <div class="qcase">Case 6 — Automation is expected to eliminate some repetitive work. Employees fear layoffs and share misinformation on internal forums.</div>
+  <div class="small">Which communication approach best reduces anxiety?</div>
+  <label>6.</label>
+  <select name="q6">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Avoid mentioning possible layoffs in communications to prevent panic and rely on rumor control managed privately by internal HR representatives.</option>
+    <option value="B">B. Address the topic directly, explain business intent, outline reskilling programs, and describe specific support options available to affected employees.</option>
+    <option value="C">C. Promise publicly that no employee will be impacted even if uncertainty remains, aiming to buy time until official workforce plans are finalized.</option>
+    <option value="D">D. Focus all communications only on productivity gains from automation and ignore workforce impact concerns to keep messaging optimistic throughout.</option>
+  </select>
+</div>
+
+<!-- 7 -->
+<div class="question" data-qid="7">
+  <div class="qcase">Case 7 — Project teams complain of unclear roles and duplicated efforts between regional offices during a transformation rollout.</div>
+  <div class="small">Which fix most quickly clarifies ownership?</div>
+  <label>7.</label>
+  <select name="q7">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Announce that all regional teams share joint accountability to foster collaboration spirit, even if responsibilities overlap across multiple regions.</option>
+    <option value="B">B. Document a RACI matrix for critical deliverables and validate accountability for each regional lead to remove confusion and duplication clearly.</option>
+    <option value="C">C. Defer role clarification until after project outcomes are evaluated to avoid interrupting ongoing tasks and maintain current collaboration structure.</option>
+    <option value="D">D. Assign every project decision to a single global executive authority to centralize control and eliminate ambiguity regarding accountability entirely.</option>
+  </select>
+</div>
+
+<!-- 8 -->
+<div class="question" data-qid="8">
+  <div class="qcase">Case 8 — A business unit resists joining a new centralized system, arguing their legacy approach serves customers better.</div>
+  <div class="small">How can change leaders encourage cooperation without losing standardization?</div>
+  <label>8.</label>
+  <select name="q8">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Define essential enterprise standards while permitting limited local customization within agreed boundaries that preserve consistency and flexibility.</option>
+    <option value="B">B. Impose a single mandatory template for all units immediately to demonstrate fairness and ensure identical compliance across every global function.</option>
+    <option value="C">C. Allow each business unit to maintain its legacy systems permanently to preserve morale, even if integration goals are delayed for several quarters.</option>
+    <option value="D">D. Threaten budget reductions for any unit that refuses to adopt the centralized solution completely within the first thirty days of rollout.</option>
+  </select>
+</div>
+
+<!-- 9 -->
+<div class="question" data-qid="9">
+  <div class="qcase">Case 9 — Post-implementation feedback shows recurring process delays at the interface between operations and finance.</div>
+  <div class="small">Which practical adjustment best resolves the bottleneck?</div>
+  <label>9.</label>
+  <select name="q9">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Add temporary staff to handle the backlog without examining root causes of delays, aiming for short-term throughput recovery in performance.</option>
+    <option value="B">B. Define joint service-level agreements, automate handoffs, and track turnaround times to ensure accountability and improve coordination efficiency.</option>
+    <option value="C">C. Remove all process review steps entirely to accelerate cycle times, even if doing so introduces potential accuracy or control issues later.</option>
+    <option value="D">D. Add additional manual verification sign-offs for every transaction to improve control but accept longer approval times across both departments.</option>
+  </select>
+</div>
+
+<!-- 10 -->
+<div class="question" data-qid="10">
+  <div class="qcase">Case 10 — Global rollout feedback shows different regions adopting at uneven rates. Some cite language barriers and training gaps.</div>
+  <div class="small">Which step accelerates consistent adoption?</div>
+  <label>10.</label>
+  <select name="q10">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Send frequent global emails reminding regional teams about compliance expectations without altering current learning formats or delivery methods.</option>
+    <option value="B">B. Appoint local champions to translate learning materials and support their peers, but without providing additional structured training resources.</option>
+    <option value="C">C. Build multilingual e-learning modules and local coaching sessions to ensure message consistency while respecting cultural and language differences.</option>
+    <option value="D">D. Remove slower regions from rollout scope entirely until they can self-correct adoption progress independently through internal initiative only.</option>
+  </select>
+</div>
+
+<!-- 11 -->
+<div class="question" data-qid="11">
+  <div class="qcase">Case 11 — Sponsors demand ROI calculations even though complete data isn’t yet available. The analytics team must act fast.</div>
+  <div class="small">What approach provides credibility with limited data?</div>
+  <label>11.</label>
+  <select name="q11">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Build a model using representative data, test assumptions transparently, and note confidence ranges for leadership decision-making clarity.</option>
+    <option value="B">B. Wait until every dataset is available before presenting any estimate, even if the final report misses urgent executive deadlines entirely.</option>
+    <option value="C">C. Deliver optimistic projections verbally without supporting data to maintain stakeholder confidence and avoid complex analytical explanation.</option>
+    <option value="D">D. Cancel ROI reporting altogether to minimize the risk of misinterpretation until next quarter’s results are available for comparison.</option>
+  </select>
+</div>
+
+<!-- 12 -->
+<div class="question" data-qid="12">
+  <div class="qcase">Case 12 — A new policy launch causes confusion because messages from senior leaders conflict across departments.</div>
+  <div class="small">Which communication correction will rebuild clarity fastest?</div>
+  <label>12.</label>
+  <select name="q12">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Increase the number of individual leader announcements to provide multiple viewpoints and emphasize personal leadership accountability messages.</option>
+    <option value="B">B. Stop all leadership communications temporarily until new internal guidelines can be drafted to standardize tone and overall narrative style.</option>
+    <option value="C">C. Replace fragmented messages with one unified communication shared through a consistent, organization-wide channel and single core storyline.</option>
+    <option value="D">D. Dismiss all communications managers immediately to demonstrate accountability and begin a completely new organizational messaging strategy.</option>
+  </select>
+</div>
+
+<!-- 13 -->
+<div class="question" data-qid="13">
+  <div class="qcase">Case 13 — Project teams struggle with changing requirements mid-cycle, creating rework and frustration.</div>
+  <div class="small">What governance measure best reduces churn?</div>
+  <label>13.</label>
+  <select name="q13">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Freeze the project scope permanently to prevent any adjustments, even if new insights later reveal critical opportunities for improvement.</option>
+    <option value="B">B. Empower sponsors to revise priorities weekly without review to promote agility and allow rapid adaptation to new leadership preferences.</option>
+    <option value="C">C. Establish a structured change-control process that formally evaluates impact, cost, and value before approving any new requirements officially.</option>
+    <option value="D">D. Avoid documenting requirement changes altogether to preserve speed and rely purely on verbal agreements among team members informally.</option>
+  </select>
+</div>
+
+<!-- 14 -->
+<div class="question" data-qid="14">
+  <div class="qcase">Case 14 — A transformation office collects large amounts of progress data but senior leaders complain it’s “too detailed to be useful.”</div>
+  <div class="small">Which adjustment improves executive engagement?</div>
+  <label>14.</label>
+  <select name="q14">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Keep existing detailed reports unchanged to maintain complete transparency and provide exhaustive information for data-driven leadership review.</option>
+    <option value="B">B. Summarize performance data into a high-level executive dashboard aligned with major strategic priorities and measurable business outcomes.</option>
+    <option value="C">C. Suspend all reporting temporarily until leaders submit detailed feedback outlining exactly which metrics they want tracked more closely.</option>
+    <option value="D">D. Outsource all data-reporting activities to external consultants who can deliver formal analytics without needing direct leadership involvement.</option>
+  </select>
+</div>
+
+<!-- 15 -->
+<div class="question" data-qid="15">
+  <div class="qcase">Case 15 — A transformation requires new data-analytics skills, but internal capability is limited.</div>
+  <div class="small">Which approach ensures both short-term delivery and long-term skill growth?</div>
+  <label>15.</label>
+  <select name="q15">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Combine focused training sessions, ongoing mentoring, and selective external hiring to fill skill gaps while growing internal capabilities sustainably.</option>
+    <option value="B">B. Outsource all analytics work permanently to consultants, avoiding investment in upskilling current employees or developing internal expertise.</option>
+    <option value="C">C. Postpone analytics initiatives indefinitely until employees develop new capabilities organically without structured learning interventions.</option>
+    <option value="D">D. Require only self-paced online learning, with no dedicated training budget or follow-up performance evaluation across participants.</option>
+  </select>
+</div>
+
+<!-- 16 -->
+<div class="question" data-qid="16">
+  <div class="qcase">Case 16 — Teams report inconsistent application of a new policy across regions, leading to confusion about expectations.</div>
+  <div class="small">Which leadership action will drive consistent compliance?</div>
+  <label>16.</label>
+  <select name="q16">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Encourage regional leads to interpret the policy individually to promote empowerment and trust in localized management decision-making.</option>
+    <option value="B">B. Publish a clarified policy handbook and conduct alignment workshops with all regional leaders to ensure consistent interpretation everywhere.</option>
+    <option value="C">C. Suspend enforcement of the policy temporarily until new fiscal-year adjustments allow for simplified rollout across all affected departments.</option>
+    <option value="D">D. Replace every regional lead who applies the policy differently to demonstrate strong commitment to global standardization objectives.</option>
+  </select>
+</div>
+
+<!-- 17 -->
+<div class="question" data-qid="17">
+  <div class="qcase">Case 17 — Midway through transformation, benefits plateau and leadership suspects cultural resistance in certain departments.</div>
+  <div class="small">Which diagnostic approach uncovers real causes fastest?</div>
+  <label>17.</label>
+  <select name="q17">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Assume resistance immediately and enforce stricter compliance rules without further investigation to accelerate performance recovery.</option>
+    <option value="B">B. Conduct focused pulse surveys, barrier analyses, and small-group interviews to identify cultural and behavioral resistance patterns accurately.</option>
+    <option value="C">C. Cancel the entire transformation program temporarily while assessing potential alignment issues within individual business divisions.</option>
+    <option value="D">D. Create an anonymous rumor channel and rely on informal employee gossip as a substitute for structured data collection or feedback.</option>
+  </select>
+</div>
+
+<!-- 18 -->
+<div class="question" data-qid="18">
+  <div class="qcase">Case 18 — A regulatory deadline forces a company to change several procedures quickly, creating pressure on quality.</div>
+  <div class="small">Which rollout plan minimizes compliance risk and maintains control?</div>
+  <label>18.</label>
+  <select name="q18">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Delay rollout until every department finalizes complete documentation to avoid risk entirely before releasing the new procedures company-wide.</option>
+    <option value="B">B. Implement all changes in a single big-bang release and address any resulting issues through rapid correction after the go-live phase.</option>
+    <option value="C">C. Roll out the minimum-compliant process first, monitor closely, and adjust procedures iteratively as issues are identified across departments.</option>
+    <option value="D">D. Allow every functional area to set its own compliance deadlines independently and manage respective regulatory requirements separately.</option>
+  </select>
+</div>
+
+<!-- 19 -->
+<div class="question" data-qid="19">
+  <div class="qcase">Case 19 — A digital-transformation sprint lacks clear decision rights between IT and Operations. Tasks stall in hand-offs and no one feels accountable.</div>
+  <div class="small">Which governance clarification resolves this?</div>
+  <label>19.</label>
+  <select name="q19">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Define a RACI structure with named owners, approvers, contributors, and escalation paths to clarify accountability between departments.</option>
+    <option value="B">B. Allow collaboration to continue informally and expect mutual understanding to improve naturally over time without further adjustments.</option>
+    <option value="C">C. Transfer all authority to Operations, removing IT from shared decisions to ensure singular ownership and streamline project outcomes.</option>
+    <option value="D">D. Outsource project management to an external provider to handle decisions independently and minimize coordination between internal teams.</option>
+  </select>
+</div>
+
+<!-- 20 -->
+<div class="question" data-qid="20">
+  <div class="qcase">Case 20 — Leadership observes early enthusiasm but waning adoption after the first quarter. People revert to old behaviors once pressure eases.</div>
+  <div class="small">Which reinforcement mechanism best sustains adoption?</div>
+  <label>20.</label>
+  <select name="q20">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Reduce measurement frequency to ease pressure and redirect focus toward launching new initiatives rather than sustaining old ones.</option>
+    <option value="B">B. Link recognition, incentives, and coaching refreshers to reinforce desired behaviors and sustain transformation outcomes across teams.</option>
+    <option value="C">C. Replace staff who do not comply immediately to set a visible precedent and deter further regression to previous work habits.</option>
+    <option value="D">D. Cease tracking performance entirely after the initial phase, trusting teams to maintain discipline without structured reinforcement mechanisms.</option>
+  </select>
+</div>
+
+<!-- 21 -->
+<div class="question" data-qid="21">
+  <div class="qcase">Case 21 — A culture-change initiative tracks attendance at workshops but not behavioral follow-through. Leaders suspect superficial compliance.</div>
+  <div class="small">Which measurement provides stronger evidence of genuine culture shift?</div>
+  <label>21.</label>
+  <select name="q21">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Count total attendance at every training session to measure commitment and ensure participation remains consistently high across units.</option>
+    <option value="B">B. Track completion forms signed by each manager to confirm awareness, without verifying changes in employee behavior or engagement.</option>
+    <option value="C">C. Combine survey results, observed behavior metrics, and peer feedback trends to assess authentic adoption of cultural practices.</option>
+    <option value="D">D. Collect informal testimonials from staff to showcase success stories and demonstrate visible enthusiasm for new organizational values.</option>
+  </select>
+</div>
+
+<!-- 22 -->
+<div class="question" data-qid="22">
+  <div class="qcase">Case 22 — Compliance teams face backlogs due to manual approval steps during transformation. Delivery leaders fear that automation might bypass needed checks.</div>
+  <div class="small">Which design balances control and speed?</div>
+  <label>22.</label>
+  <select name="q22">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Embed lightweight automated checkpoints within each sprint and define escalation routes for exceptions requiring human intervention.</option>
+    <option value="B">B. Pause all software development until a fully staffed compliance department can take complete ownership of review processes.</option>
+    <option value="C">C. Allow teams to skip approval stages near deadlines to maintain delivery velocity even when control mechanisms are not applied.</option>
+    <option value="D">D. Introduce multiple manual sign-off layers for every stage to ensure maximum compliance coverage across all ongoing initiatives.</option>
+  </select>
+</div>
+
+<!-- 23 -->
+<div class="question" data-qid="23">
+  <div class="qcase">Case 23 — Executives ask for proof that engagement programs are improving retention, but HR lacks unified analytics tools.</div>
+  <div class="small">Which short-term step demonstrates value credibly?</div>
+  <label>23.</label>
+  <select name="q23">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Wait until next fiscal year’s turnover data becomes available before presenting any initial findings to senior management review.</option>
+    <option value="B">B. Share anecdotal stories from a few motivated departments to highlight positive morale changes observed through informal conversations.</option>
+    <option value="C">C. Correlate pilot-area retention rates with participation data and report statistically meaningful trends supported by transparent analysis.</option>
+    <option value="D">D. Delay analysis entirely until a new HR analytics platform is implemented and operational for data accuracy and system consistency.</option>
+  </select>
+</div>
+
+<!-- 24 -->
+<div class="question" data-qid="24">
+  <div class="qcase">Case 24 — Cross-functional teams report delayed decisions because senior approval chains remain unchanged despite agile rollout.</div>
+  <div class="small">Which organizational change unlocks faster progress?</div>
+  <label>24.</label>
+  <select name="q24">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Add additional review gates to ensure accuracy of all deliverables before they reach senior leadership for final endorsement.</option>
+    <option value="B">B. Empower product owners with defined decision rights and accountability boundaries to streamline approvals within agile governance.</option>
+    <option value="C">C. Maintain existing legacy approval workflows until leadership confidence increases after post-project evaluations confirm improvements.</option>
+    <option value="D">D. Require all operational decisions, including minor process changes, to escalate to executive committees for collective authorization.</option>
+  </select>
+</div>
+
+<!-- 25 -->
+<div class="question" data-qid="25">
+  <div class="qcase">Case 25 — Quality issues persist even after a new process rollout. Teams complain that metrics reward speed, not accuracy.</div>
+  <div class="small">Which metric redesign best drives balanced performance?</div>
+  <label>25.</label>
+  <select name="q25">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Continue tracking output volume exclusively to preserve simplicity and minimize data-collection complexity across performance dashboards.</option>
+    <option value="B">B. Implement a balanced-scorecard combining quality, timeliness, and customer satisfaction indicators to reinforce holistic accountability measures.</option>
+    <option value="C">C. Eliminate all measurement programs temporarily to allow teams freedom to focus on organic improvements and creative work solutions.</option>
+    <option value="D">D. Monitor only defect counts to highlight quality performance while removing throughput metrics that distract from attention to detail.</option>
+  </select>
+</div>
+
+<!-- 26 -->
+<div class="question" data-qid="26">
+  <div class="qcase">Case 26 — A major systems upgrade requires temporary dual data entry. Staff are frustrated by extra work and slow adoption.</div>
+  <div class="small">Which engagement tactic eases transition pain?</div>
+  <label>26.</label>
+  <select name="q26">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Recognize early adopters publicly, provide visible incentives, and emphasize accuracy throughout the dual-entry phase for consistency.</option>
+    <option value="B">B. Penalize data-entry mistakes immediately to build discipline and encourage employees to work faster under strict compliance pressure.</option>
+    <option value="C">C. Ignore frustration complaints and expect performance to improve naturally once familiarity with the new system increases gradually.</option>
+    <option value="D">D. Halt the system upgrade until dual-entry work is no longer necessary, preventing additional strain on operational employee capacity.</option>
+  </select>
+</div>
+
+<!-- 27 -->
+<div class="question" data-qid="27">
+  <div class="qcase">Case 27 — Regional leaders complain that central PMO reports are too theoretical and don’t reflect local progress.</div>
+  <div class="small">Which adjustment increases local ownership and data quality?</div>
+  <label>27.</label>
+  <select name="q27">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Maintain centralized reporting but slightly shorten templates to reduce effort without changing the existing overall report structure.</option>
+    <option value="B">B. Involve regional teams in co-designing dashboards with shared definitions to ensure accurate, relevant, and credible performance data.</option>
+    <option value="C">C. Eliminate all regional reporting entirely to minimize administrative workload and encourage teams to focus purely on delivery.</option>
+    <option value="D">D. Outsource dashboard creation to external consultants who will independently interpret progress based on general project documentation.</option>
+  </select>
+</div>
+
+<!-- 28 -->
+<div class="question" data-qid="28">
+  <div class="qcase">Case 28 — A transformation budget faces cuts mid-year. Leadership must decide how to prioritize remaining funds for impact.</div>
+  <div class="small">Which decision pattern achieves visible results fastest?</div>
+  <label>28.</label>
+  <select name="q28">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Pause all current initiatives immediately to prevent overspending until future funding cycles restore full transformation budgets.</option>
+    <option value="B">B. Distribute the reduced funds evenly across all projects to maintain fairness even if individual project outcomes are limited.</option>
+    <option value="C">C. Concentrate resources on high-impact pilot initiatives that demonstrate quick wins and can be scaled later across the enterprise.</option>
+    <option value="D">D. Borrow against future financial cycles to sustain every existing project unchanged regardless of return on investment evaluation.</option>
+  </select>
+</div>
+
+<!-- 29 -->
+<div class="question" data-qid="29">
+  <div class="qcase">Case 29 — Employee morale surveys show declining engagement despite improved process efficiency. Teams report feeling disconnected from purpose.</div>
+  <div class="small">Which leadership action addresses this most effectively?</div>
+  <label>29.</label>
+  <select name="q29">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Reconnect teams with real customer impact stories, celebrate contributions publicly, and emphasize purpose-driven recognition activities.</option>
+    <option value="B">B. Raise performance targets to reignite urgency and motivate employees through stronger accountability and improved output pressure.</option>
+    <option value="C">C. Replace disengaged teams entirely with new hires to signal organizational renewal and restore productivity through fresh perspectives.</option>
+    <option value="D">D. Suspend recognition programs temporarily to conserve budget and allow motivation to recover naturally through self-directed effort.</option>
+  </select>
+</div>
+
+<!-- 30 -->
+<div class="question" data-qid="30">
+  <div class="qcase">Case 30 — A transformation sprint shows shorter cycle times but a surge in downstream rework. Managers suspect quality trade-offs.</div>
+  <div class="small">Which root-cause approach uncovers the real issue?</div>
+  <label>30.</label>
+  <select name="q30">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Focus exclusively on speed metrics to sustain short-term momentum and prevent distractions from other performance indicators.</option>
+    <option value="B">B. Increase overall workload expectations to test team resilience and encourage employees to adapt under stronger productivity pressure.</option>
+    <option value="C">C. Facilitate value-stream mapping workshops across departments to locate waste points and identify improvement opportunities systematically.</option>
+    <option value="D">D. Eliminate formal quality checks entirely to preserve high output rates and ensure consistent short-term progress during transformations.</option>
+  </select>
+</div>
+
+<!-- 31 -->
+<div class="question" data-qid="31">
+  <div class="qcase">Case 31 — Different functions define “completion” of work differently, leading to mismatched expectations and rework.</div>
+  <div class="small">Which fix establishes shared understanding?</div>
+  <label>31.</label>
+  <select name="q31">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Document clear acceptance criteria, “definition of done,” and quality standards applicable to all deliverables across all teams consistently.</option>
+    <option value="B">B. Allow every department to interpret completion definitions independently to support flexibility and respect local management preferences.</option>
+    <option value="C">C. Focus solely on throughput performance without defining qualitative criteria, assuming delivery speed implies task completion accuracy.</option>
+    <option value="D">D. Wait until post-project audits to align completion standards after most deliverables are finalized across the entire organization.</option>
+  </select>
+</div>
+
+<!-- 32 -->
+<div class="question" data-qid="32">
+  <div class="qcase">Case 32 — Senior sponsors want to embed continuous-improvement habits after major change delivery ends.</div>
+  <div class="small">Which capability most reliably sustains improvement?</div>
+  <label>32.</label>
+  <select name="q32">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Provide training on experimentation cycles, schedule regular reviews, and reward learning outcomes that reinforce sustainable progress.</option>
+    <option value="B">B. Declare continuous improvement as a company value without adding new structural processes or measurement frameworks internally.</option>
+    <option value="C">C. Assign a specialized improvement unit responsible for all initiatives independently to avoid dependency on everyday business functions.</option>
+    <option value="D">D. Discontinue all improvement activities once original transformation objectives are met and performance indicators stabilize consistently.</option>
+  </select>
+</div>
+
+<!-- 33 -->
+<div class="question" data-qid="33">
+  <div class="qcase">Case 33 — Vendor integrations lag because third parties lack shared testing timelines. Delays cause reputational risk.</div>
+  <div class="small">Which vendor-management step accelerates success?</div>
+  <label>33.</label>
+  <select name="q33">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Impose strict penalties for every missed milestone to enforce accountability through contractual obligations and performance clauses.</option>
+    <option value="B">B. Terminate non-performing vendor contracts immediately and begin searching for replacements mid-project despite transition risks.</option>
+    <option value="C">C. Develop joint roadmaps, align testing schedules, and maintain transparent milestone visibility across all vendor partnerships proactively.</option>
+    <option value="D">D. Allow vendors complete autonomy to define timelines independently and avoid micromanagement of their operational scheduling approaches.</option>
+  </select>
+</div>
+
+<!-- 34 -->
+<div class="question" data-qid="34">
+  <div class="qcase">Case 34 — Budget restrictions prevent company-wide classroom training. Leadership wants scalable capability development.</div>
+  <div class="small">Which learning model delivers reach and reinforcement cost-effectively?</div>
+  <label>34.</label>
+  <select name="q34">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Deliver blended learning using virtual modules, self-paced micro-sessions, and peer coaching to reinforce behavior and sustain capability.</option>
+    <option value="B">B. Replace all structured programs with written manuals only, ensuring employees independently interpret and apply technical content.</option>
+    <option value="C">C. Conduct single large workshops without follow-up reinforcement and rely on initial enthusiasm to sustain employee skill retention.</option>
+    <option value="D">D. Defer all training initiatives until next fiscal year when financial resources become sufficient for in-person program delivery.</option>
+  </select>
+</div>
+
+<!-- 35 -->
+<div class="question" data-qid="35">
+  <div class="qcase">Case 35 — Employees request more clarity on change rationale. Many claim leadership “doesn’t walk the talk.”</div>
+  <div class="small">Which response rebuilds credibility?</div>
+  <label>35.</label>
+  <select name="q35">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Host open town halls and two-way dialogue forums where executives respond transparently to employee concerns and clarify intent.</option>
+    <option value="B">B. Send formal written memos from leadership reiterating organizational priorities and emphasizing strict adherence to senior direction.</option>
+    <option value="C">C. Dismiss the current communications team and rebuild a new internal PR department to design updated messaging campaigns.</option>
+    <option value="D">D. Limit external and internal communication completely to prevent potential misunderstandings or conflicting interpretations of strategy.</option>
+  </select>
+</div>
+
+<!-- 36 -->
+<div class="question" data-qid="36">
+  <div class="qcase">Case 36 — Multiple improvement projects run independently with overlapping goals. Employees feel pulled in different directions.</div>
+  <div class="small">Which governance approach reduces duplication and fatigue?</div>
+  <label>36.</label>
+  <select name="q36">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Establish a portfolio board to prioritize initiatives, eliminate overlaps, and coordinate improvement scheduling organization-wide.</option>
+    <option value="B">B. Allow every project to continue autonomously to maintain innovation speed and avoid interference from central management structures.</option>
+    <option value="C">C. Suspend all projects indefinitely until a new leadership team reviews strategy alignment and redefines corporate priorities properly.</option>
+    <option value="D">D. Rotate project leads quarterly to introduce variety and prevent long-term commitment to any single improvement initiative.</option>
+  </select>
+</div>
+
+<!-- 37 -->
+<div class="question" data-qid="37">
+  <div class="qcase">Case 37 — After new workflows, customer complaints fall but cycle-time metrics stagnate. Teams debate whether to optimize further.</div>
+  <div class="small">Which evaluation ensures balanced progress?</div>
+  <label>37.</label>
+  <select name="q37">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Measure both efficiency and customer satisfaction metrics and analyze correlations to find balanced continuous-improvement priorities.</option>
+    <option value="B">B. Concentrate only on reducing time metrics to demonstrate productivity growth and highlight faster operational delivery outcomes.</option>
+    <option value="C">C. Ignore measurement systems entirely and rely on anecdotal evidence of improvements gathered from informal team discussions.</option>
+    <option value="D">D. End evaluation activities once initial customer complaints decrease, assuming further optimization will not yield additional gains.</option>
+  </select>
+</div>
+
+<!-- 38 -->
+<div class="question" data-qid="38">
+  <div class="qcase">Case 38 — A rollout team notices that regions applying continuous-feedback loops outperform others. Management wants to replicate success.</div>
+  <div class="small">Which knowledge-sharing method spreads best practices effectively?</div>
+  <label>38.</label>
+  <select name="q38">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Establish cross-regional communities of practice and publish success stories demonstrating high-performing change adoption patterns.</option>
+    <option value="B">B. Require all teams to replicate identical procedures without modifications regardless of local conditions or operational differences.</option>
+    <option value="C">C. Restrict access to improvement documentation to protect competitive internal advantage and prevent idea misuse among departments.</option>
+    <option value="D">D. Randomly rotate team members between regions without structured documentation or explanation to encourage cross-learning indirectly.</option>
+  </select>
+</div>
+
+<!-- 39 -->
+<div class="question" data-qid="39">
+  <div class="qcase">Case 39 — Transformation success metrics plateau; leaders fear complacency. They wish to reinvigorate improvement mindset.</div>
+  <div class="small">Which leadership tactic reignites momentum?</div>
+  <label>39.</label>
+  <select name="q39">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Launch new improvement experiments with defined learning objectives and celebrate incremental progress across visible milestones.</option>
+    <option value="B">B. Suspend all current initiatives temporarily to analyze benchmarks and determine future priorities through detailed external reviews.</option>
+    <option value="C">C. Reassign transformation leads to new departments suddenly to create urgency and generate renewed enthusiasm for performance.</option>
+    <option value="D">D. Replace key executive sponsors immediately to demonstrate accountability and introduce renewed urgency into leadership dynamics.</option>
+  </select>
+</div>
+
+<!-- 40 -->
+<div class="question" data-qid="40">
+  <div class="qcase">Case 40 — Final surveys show the change widely adopted but communication cadence drops sharply post-implementation.</div>
+  <div class="small">Which follow-up habit sustains engagement long term?</div>
+  <label>40.</label>
+  <select name="q40">
+    <option value="">-- Select Answer --</option>
+    <option value="A">A. Schedule quarterly review sessions, share visible progress dashboards, and invite continuous feedback to sustain engagement actively.</option>
+    <option value="B">B. End all communications after launch completion to minimize fatigue and allow employees to focus solely on operational priorities.</option>
+    <option value="C">C. Limit communication updates to annual executive summaries providing broad overviews without interactive feedback opportunities.</option>
+    <option value="D">D. Transfer ongoing communication activities exclusively to HR to standardize messaging but reduce leadership visibility over time.</option>
+  </select>
+</div>
+
+    </div>
+
+    <div style="display:flex;gap:10px;align-items:center;margin-top:10px">
+      <button type="submit" id="submitBtn">Submit Answers</button>
+      <button type="button" id="downloadBtn" class="secondary" disabled>Download Results (.txt)</button>
+      <div style="margin-left:auto" class="muted">Make sure name is filled before submit.</div>
+    </div>
+    <div id="submitMsg"></div>
+  </form>
+</div>
+
+<script>
+(function(){
+  // === Config ===
+  const ACCESS_CODE = "MI-A-UY";
+  const PASS_PERCENT = 80;
+  const START_SECONDS = 40 * 60;
+  let totalSeconds = START_SECONDS, timerInterval = null, examStarted = false;
+
+  // === Original correct answers in the original question order (1..40) ===
+  const originalCorrect = [
+     "A","B","D","C","A","B","B","A","B","C",
+    "A","D","C","B","A","B","D","C","A","B",
+    "C","A","D","B","C","A","B","D","A","C",
+    "B","D","C","A","B","A","C","D","A","B"
+  ];
+
+  // running correct answers will be remapped after randomization
+  let correctAnswers = originalCorrect.slice();
+
+  // === Elements ===
+  const timerEl = document.getElementById('timer');
+  const examForm = document.getElementById('examForm');
+  const accessSection = document.getElementById('accessCodeSection');
+  const examCodeBtn = document.getElementById('examCodeBtn');
+  const examCodeInput = document.getElementById('examCodeInput');
+  const codeError = document.getElementById('codeError');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const submitMsg = document.getElementById('submitMsg');
+  const questionsContainer = document.getElementById('questions');
+
+  // Timer functions
+  function updateTimerDisplay(){
+    const m = Math.floor(totalSeconds/60);
+    const s = totalSeconds % 60;
+    timerEl.textContent = (m<10? '0'+m : m) + ':' + (s<10? '0'+s : s);
+  }
+  function startTimer(){
+    clearInterval(timerInterval);
+    timerInterval = setInterval(()=>{
+      totalSeconds--;
+      if(totalSeconds <= 0){
+        clearInterval(timerInterval);
+        lockExam();
+        return;
+      }
+      updateTimerDisplay();
+    },1000);
+  }
+  function lockExam(){
+    examForm.querySelectorAll('select,input').forEach(el => el.disabled = true);
+    submitMsg.style.display = 'block';
+    submitMsg.textContent = '⏰ Time is up! Auto-submitting your answers...';
+    setTimeout(()=> submitAnswers(true), 700);
+  }
+
+  // Anti-cheat
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('copy', e => e.preventDefault());
+  document.addEventListener('cut', e => e.preventDefault());
+  document.addEventListener('selectstart', e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if((e.ctrlKey || e.metaKey) && ['c','x','u','s','a','p'].includes(e.key.toLowerCase())) e.preventDefault();
+  });
+  function resetExam(reason){
+    if(!examStarted) return;
+    alert('Exam reset due to ' + reason + '. The page will reload.');
+    location.reload();
+  }
+  document.addEventListener('visibilitychange', ()=> { if(document.hidden && examStarted) resetExam('tab change'); });
+  window.addEventListener('blur', ()=> { if(examStarted) resetExam('window minimize or focus loss'); });
+
+  // Access code start logic
+  examCodeBtn.addEventListener('click', function(){
+    if((examCodeInput.value || '').trim() === ACCESS_CODE){
+      codeError.style.display = 'none';
+      accessSection.style.display = 'none';
+      examForm.style.display = 'block';
+      examStarted = true;
+      totalSeconds = START_SECONDS;
+      updateTimerDisplay();
+      startTimer();
+      randomizeQuestionsAndAnswers(); // randomize after showing exam
+    } else {
+      codeError.style.display = 'block';
+    }
+  });
+  examCodeInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); examCodeBtn.click(); }
+  });
+
+  // Submission
+  examForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = (document.getElementById('studentName').value || '').trim();
+    if(!name){ alert('Please enter your name before submitting.'); return; }
+    submitAnswers(false);
+  });
+
+  function submitAnswers(isTimeout){
+    clearInterval(timerInterval);
+    examStarted = false;
+    const name = (document.getElementById('studentName').value || '').trim() || 'UNKNOWN';
+    const total = correctAnswers.length;
+    let correct = 0;
+    const report = [];
+
+    report.push('Student: ' + name);
+    report.push('Timestamp: ' + new Date().toLocaleString());
+    report.push('');
+
+    for(let i=1;i<=total;i++){
+      const sel = examForm.querySelector('[name=q' + i + ']');
+      const chosen = sel && sel.value ? sel.value : '';
+      const correctLetter = correctAnswers[i-1] || '';
+      const chosenText = sel ? (sel.options[sel.selectedIndex] ? sel.options[sel.selectedIndex].text : '') : '';
+      let correctText = '';
+      if(sel){
+        for(let k=0;k<sel.options.length;k++){
+          if(sel.options[k].value === correctLetter){ correctText = sel.options[k].text; break; }
+        }
+      }
+      const isCorrect = chosen === correctLetter;
+      if(isCorrect) correct++;
+      report.push('Q' + i + ': ' + (isCorrect? '✅' : '❌') + ' Your: ' + (chosenText || '(blank)') + ' | Correct: ' + (correctText || '(not found)'));
+    }
+
+    const percent = Math.round((correct/total)*100);
+    const passed = percent >= PASS_PERCENT;
+    report.push('');
+    report.push('Score: ' + correct + '/' + total + ' (' + percent + '%)');
+    report.push('Result: ' + (passed ? 'PASSED ✅' : 'FAILED ❌'));
+
+    submitMsg.style.display = 'block';
+    submitMsg.textContent = 'Exam submitted. Score: ' + correct + '/' + total + ' (' + percent + '%) — ' + (passed ? 'PASSED ✅' : 'FAILED ❌');
+
+    const blob = new Blob([report.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+
+    // 🔐 Secure Download - Password Required
+    window.reportData = report.join('\n');
+    downloadBtn.disabled = false;
+    downloadBtn.onclick = function(){
+      const ANSWER_DOWNLOAD_PASSWORD = "PUYA-UY-0"; // Instructor password
+      const pwd = prompt("Enter Instructor Password to Download Results:");
+
+      if(pwd !== ANSWER_DOWNLOAD_PASSWORD){
+        alert("❌ Incorrect Password — Download Blocked");
+        return;
+      }
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (name.replace(/\s+/g,'_') || 'answers') + '_results.txt';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(()=>{
+        URL.revokeObjectURL(url);
+        a.remove();
+      },3000);
+    };
+
+    examForm.querySelectorAll('select,input,button').forEach(el => {
+      if(el !== downloadBtn) el.disabled = true;
+    });
+  }
+
+  // === RANDOMIZER FUNCTION ===
+  function shuffleArray(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j=Math.floor(Math.random()*(i+1));
+      [arr[i],arr[j]]=[arr[j],arr[i]];
+    }
+    return arr;
+  }
+
+  function randomizeQuestionsAndAnswers(){
+    const container = questionsContainer;
+    const blocks = Array.from(container.querySelectorAll('.question'));
+
+    const shuffled = shuffleArray(blocks.slice());
+    const newCorrect = [];
+    container.innerHTML = '';
+
+    shuffled.forEach((block, idx) => {
+      container.appendChild(block);
+
+      const origQid = parseInt(block.getAttribute('data-qid'), 10);
+      newCorrect[idx] = originalCorrect[origQid - 1];
+
+      const select = block.querySelector('select');
+      if(select){
+        const placeholder = Array.from(select.options).find(o => o.value === "");
+        const opts = Array.from(select.options).filter(o => o.value !== "");
+        shuffleArray(opts);
+        select.innerHTML = "";
+        if(placeholder) select.appendChild(placeholder);
+        opts.forEach(o => select.appendChild(o));
+        select.name = 'q' + (idx + 1);
+      }
+    });
+
+    correctAnswers = newCorrect.slice();
+  }
+
+  updateTimerDisplay();
+})();
+</script>
+
+
+
+</body>
+</html>
